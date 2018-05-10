@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, CKEasyV2_TLB, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, CKEasyV2_TLB, Vcl.StdCtrls, Vcl.AppEvnts;
 
 type
   TfoMain = class(TForm)
@@ -26,10 +26,17 @@ type
     buErrorTest: TButton;
     buColor: TButton;
     edAmount: TEdit;
+    ApplicationEvents1: TApplicationEvents;
+    procedure ApplicationEvents1ShowHint(var HintStr: string; var CanShow: Boolean;
+        var HintInfo: THintInfo);
+    procedure buAddChangeClick(Sender: TObject);
+    procedure buChangeClick(Sender: TObject);
     procedure buChargeClick(Sender: TObject);
     procedure buColorClick(Sender: TObject);
+    procedure buConfigurationClick(Sender: TObject);
     procedure buConnectClick(Sender: TObject);
     procedure buDisconnectClick(Sender: TObject);
+    procedure byPayClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     Fck: EasyCashKeeper;
@@ -44,6 +51,37 @@ implementation
 
 {$R *.dfm}
 
+procedure TfoMain.ApplicationEvents1ShowHint(var HintStr: string; var CanShow:
+    Boolean; var HintInfo: THintInfo);
+begin
+  HintInfo.HintMaxWidth := Self.Width;
+  HintInfo.HideTimeout := 10000;
+end;
+
+procedure TfoMain.buAddChangeClick(Sender: TObject);
+var
+  iValueInCents: integer;
+  bResult: Boolean;
+  Msg: String;
+begin
+  iValueInCents := StrToInt(edAmount.Text);
+  bResult := Fck.AddChange(iValueInCents);
+  Msg := Format('AddedChange: %d',[iValueInCents]);
+  CheckError(bResult, Msg);
+end;
+
+procedure TfoMain.buChangeClick(Sender: TObject);
+var
+  iPaidInValue, iPaidOutValue: integer;
+  bResult: Boolean;
+  Msg: String;
+begin
+  iPaidInValue := StrToInt(edAmount.Text);
+  bResult := Fck.Change(iPaidInValue, iPaidOutValue);
+  Msg := Format('Introduced: %d. Payed: %d',[iPaidInValue, iPaidOutValue]);
+  CheckError(bResult, Msg);
+end;
+
 procedure TfoMain.buChargeClick(Sender: TObject);
 var
   iValueInCents, iPaidInValue, iPaidOutValue: integer;
@@ -52,7 +90,7 @@ var
 begin
   iValueInCents := StrToInt(edAmount.Text);
   bResult := Fck.Charge(iValueInCents, iPaidInValue, iPaidOutValue);
-  Msg := Format('PaidInValue: %d. PaitOutValue: %d',[iPaidInValue, iPaidOutValue]);
+  Msg := Format('PaidInValue: %d. PaidOutValue: %d',[iPaidInValue, iPaidOutValue]);
   CheckError(bResult, Msg);
 end;
 
@@ -60,6 +98,15 @@ procedure TfoMain.buColorClick(Sender: TObject);
 begin
   Self.Color := RandomColor;
   Fck.BackColor := Self.Color;
+end;
+
+procedure TfoMain.buConfigurationClick(Sender: TObject);
+begin
+  if Fck.Configuration then
+    MessageDlg('Configuration was successful', mtInformation, [mbOK], 0)
+  else
+    MessageDlg('Configuration failed', mtError, [mbOK], 0)
+  ;
 end;
 
 procedure TfoMain.buConnectClick(Sender: TObject);
@@ -78,6 +125,18 @@ begin
   if MessageDlg('Close?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     Close
   ;
+end;
+
+procedure TfoMain.byPayClick(Sender: TObject);
+var
+  iValueInCents, iPaidOutValue: integer;
+  bResult: Boolean;
+  Msg: String;
+begin
+  iValueInCents := StrToInt(edAmount.Text);
+  bResult := Fck.Pay(iValueInCents, iPaidOutValue);
+  Msg := Format('PaidOutValue: %d',[iPaidOutValue]);
+  CheckError(bResult, Msg);
 end;
 
 procedure TfoMain.CheckError(bResult: Boolean; const sMsg: string);
