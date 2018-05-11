@@ -1,7 +1,7 @@
 object foMain: TfoMain
   Left = 0
   Top = 0
-  Hint = 'asdf'
+  ActiveControl = buConnect
   BorderStyle = bsDialog
   Caption = 'CashKeeper my demo'
   ClientHeight = 319
@@ -13,6 +13,7 @@ object foMain: TfoMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -67,7 +68,7 @@ object foMain: TfoMain
     TabOrder = 2
     OnClick = buChargeClick
   end
-  object byPay: TButton
+  object buPay: TButton
     Left = 16
     Top = 94
     Width = 90
@@ -79,7 +80,7 @@ object foMain: TfoMain
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
-    OnClick = byPayClick
+    OnClick = buPayClick
   end
   object buAddChange: TButton
     Left = 16
@@ -141,87 +142,118 @@ object foMain: TfoMain
     ParentShowHint = False
     ShowHint = True
     TabOrder = 7
+    OnClick = buCBControlClick
   end
   object buPaySpecific: TButton
     Left = 16
     Top = 280
     Width = 90
     Height = 25
+    Hint = 
+      'The PaySpecific function should be used to make payments with sp' +
+      'ecific denominations. The process and conditions that follows a ' +
+      'specific payment are the same as a standard payment.'
     Caption = 'PaySpecific'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 8
+    OnClick = buPaySpecificClick
   end
   object buGetLevels: TButton
     Left = 113
     Top = 94
     Width = 90
     Height = 25
+    Hint = 
+      'Screenless function to get the contain detail of CashKeeper. Dep' +
+      'ending on the LevelType parameter will return the initial, maxim' +
+      'um, change or cashbox.'
     Caption = 'GetLevels'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 9
+    OnClick = buGetLevelsClick
   end
-  object buBlidCashBox: TButton
+  object buBlindCashBox: TButton
     Left = 113
     Top = 131
     Width = 90
     Height = 25
-    Caption = 'BlidCashBox'
+    Hint = 
+      'It shows a process screen (without data) and does the end of day' +
+      ' process (send the remaining of initial change to cashbox and em' +
+      'pty cashboxes).'
+    Caption = 'BlindCashBox'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 10
+    OnClick = buBlindCashBoxClick
   end
-  object buZByAmount: TButton
+  object buBlindByValue: TButton
     Left = 113
     Top = 168
     Width = 90
     Height = 25
-    Caption = 'ZByAmount'
+    Hint = 
+      'It shows a process screen (without data) and does the end of day' +
+      ' process (send the remaining of initial change to cashbox and em' +
+      'pty cashboxes). You must provide the amount you want to keep in ' +
+      'change on RemainingChange parameter.'
+    Caption = 'BlindByValue'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 11
+    OnClick = buBlindByValueClick
   end
-  object buEmptyCB: TButton
+  object buEmptyCashBox: TButton
     Left = 113
     Top = 205
     Width = 90
     Height = 25
-    Caption = 'EmptyCB'
+    Hint = 'Screenless function to empty the cashboxes.'
+    Caption = 'EmptyCashBox'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 12
+    OnClick = buEmptyCashBoxClick
   end
   object buGetAmounts: TButton
     Left = 210
     Top = 94
     Width = 90
     Height = 25
+    Hint = 
+      'Screenless function to get the exchange contains detail of CashK' +
+      'eeper.'
     Caption = 'GetAmounts'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 13
+    OnClick = buGetAmountsClick
   end
-  object buErrorTest: TButton
+  object buErrorManage: TButton
     Left = 210
     Top = 131
     Width = 90
     Height = 25
-    Caption = 'ErrorTest'
+    Hint = 'Simulates an error'
+    Caption = 'ErrorManage'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 14
+    OnClick = buErrorManageClick
   end
-  object buColor: TButton
+  object buBackColor: TButton
     Left = 210
     Top = 168
     Width = 90
     Height = 25
-    Caption = 'Color'
+    Hint = 'Background color for library dialogs'
+    Caption = 'BackColor'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 15
-    OnClick = buColorClick
+    OnClick = buBackColorClick
   end
   object edAmount: TEdit
     Left = 113
